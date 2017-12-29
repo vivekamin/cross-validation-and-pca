@@ -11,4 +11,6 @@
    ### PCA
    Implemented PCA to reduce the dimensionality of the data from 166 to 50.Then on this new reduced dataset, implemented 5-fold cross validation for kNN and plotted the average accuracy on the validation set vs. each possible k ∈ K.
    
+   Used reference for [PCA](https://plot.ly/ipython-notebooks/principal-component-analysis/)
+   
    
