@@ -10,14 +10,14 @@ from sklearn.preprocessing import StandardScaler
 
 readFile = sio.loadmat('knn_data.mat')
 
-kmeansData = np.array(readFile['train_data'])
-kmeansLabel = np.array(readFile['train_label'])
+knnData = np.array(readFile['train_data'])
+knnLabel = np.array(readFile['train_label'])
 
-kmeansTestData = np.array(readFile['test_data'])
-kmeansTestLabel = np.array(readFile['test_label'])
+knnTestData = np.array(readFile['test_data'])
+knnTestLabel = np.array(readFile['test_label'])
 
-def PCA(kmeansData1):
-    X_std = StandardScaler().fit_transform(kmeansData1)
+def PCA(knnData1):
+    X_std = StandardScaler().fit_transform(knnData1)
 
 
 
@@ -28,7 +28,7 @@ def PCA(kmeansData1):
     eig_vals, eig_vecs = np.linalg.eig(cov_mat)
     cor_mat1 = np.corrcoef(X_std.T)
     eig_vals, eig_vecs = np.linalg.eig(cor_mat1)
-    cor_mat2 = np.corrcoef(kmeansData1.T)
+    cor_mat2 = np.corrcoef(knnData1.T)
     eig_vals, eig_vecs = np.linalg.eig(cor_mat2)
     u,s,v = np.linalg.svd(X_std.T)
     eig_pairs = [(np.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
@@ -40,9 +40,9 @@ def PCA(kmeansData1):
     return X_std.dot(matrix_w)
 
 
-transformed = PCA(kmeansData)
+transformed = PCA(knnData)
 
-transformed, kmeansLabel = shuffle(transformed, kmeansLabel, random_state=0)
+transformed, knnLabel = shuffle(transformed, knnLabel, random_state=0)
 
 i = 0
 trainingData = np.zeros((4000,transformed.shape[1]))
@@ -53,17 +53,17 @@ for l in range(0,9,1):
     total_accuracy = 0
     for x in range(0,5,1):
         knn = KNeighborsClassifier(n_neighbors=k)
-        z = x * int(kmeansLabel.shape[0]/5)
-        trainingData = transformed[z+int(kmeansLabel.shape[0]/5):]
-        trainingLabel = kmeansLabel[z+int(kmeansLabel.shape[0]/5):]
+        z = x * int(knnLabel.shape[0]/5)
+        trainingData = transformed[z+int(knnLabel.shape[0]/5):]
+        trainingLabel = knnLabel[z+int(knnLabel.shape[0]/5):]
         temp = transformed[0:int(z)]
-        temp1 = kmeansLabel[0:int(z)]
+        temp1 = knnLabel[0:int(z)]
         if(x > 0):
             trainingData = np.concatenate((trainingData,temp),axis = 0)
             trainingLabel = np.concatenate((trainingLabel,temp1),axis = 0)
 
-        testData = transformed[z : z+int(kmeansLabel.shape[0]/5)]
-        testLabel = kmeansLabel[z : z+int(kmeansLabel.shape[0]/5)]
+        testData = transformed[z : z+int(knnLabel.shape[0]/5)]
+        testLabel = knnLabel[z : z+int(knnLabel.shape[0]/5)]
         knn.fit(trainingData, trainingLabel)
         pred = knn.predict(testData)
         total_accuracy += accuracy_score(testLabel, pred)
@@ -89,8 +89,8 @@ plt.show()
 
 k_clusters = A[index]
 print(k_clusters)
-transformed_test = PCA(kmeansTestData)
+transformed_test = PCA(knnTestData)
 knn = KNeighborsClassifier(n_neighbors=k_clusters)
-knn.fit(transformed, kmeansLabel)
+knn.fit(transformed, knnLabel)
 pred = knn.predict(transformed_test)
-print (accuracy_score(kmeansTestLabel, pred))
+print (accuracy_score(knnTestLabel, pred))
