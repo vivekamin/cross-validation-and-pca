@@ -1,5 +1,3 @@
-import scipy as sc
-import pandas as pd
 import scipy.io as sio 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -43,7 +41,7 @@ for l in range(0,9,1):
         knn.fit(trainingData, trainingLabel)
         pred = knn.predict(testData)
         total_accuracy += accuracy_score(testLabel, pred)
-    print('Average Accuracy for ',k, total_accuracy/5)
+    print('Average Accuracy for k=',k,'is', total_accuracy/5)
     k_s.append(k)
     accuracy_for_k.append(total_accuracy/5)
     
@@ -66,7 +64,7 @@ plt.ylabel("Accuracy")
 plt.show()
 
 kclusters = A[index]
-print(y1)
+#print(y1)
 # trainData = np.array(knn_data['train_data'])
 # trainLabel = np.array(knn_data['train_label'])
 testData = np.array(knn_data['test_data'])
@@ -78,5 +76,5 @@ testLabel = testLabel.reshape(1598,)
 knn = KNeighborsClassifier(n_neighbors=kclusters)
 knn.fit(trainData, trainLabel)
 pred = knn.predict(testData)
-print (accuracy_score(testLabel, pred))
+print ("Test Accuracy for  k=", kclusters,'is', accuracy_score(testLabel, pred))
 
