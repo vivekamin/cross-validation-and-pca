@@ -41,7 +41,7 @@ for l in range(0,9,1):
         knn.fit(trainingData, trainingLabel)
         pred = knn.predict(testData)
         total_accuracy += accuracy_score(testLabel, pred)
-    print('Average Accuracy for k=',k,'is', total_accuracy/5)
+    print('Average Train Accuracy for k=',k,'is', total_accuracy/5)
     k_s.append(k)
     accuracy_for_k.append(total_accuracy/5)
     
